@@ -1,43 +1,19 @@
-﻿using Bannerlord.UIExtenderEx;
-using System;
-using System.Runtime.InteropServices;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+using TwitchIntegration.Behaviors;
 
 namespace TwitchIntegration
 {
     public class MySubModule : MBSubModuleBase
     {
-        private UIExtender _uiExtender = new UIExtender("TwitchIntegration");
-        protected override void OnSubModuleLoad()
+        protected override void OnGameStart(Game game, IGameStarter gameStarter)
         {
-            try
+            if (game.GameType is Campaign)
             {
-                base.OnSubModuleLoad();
-                _uiExtender.Register(typeof(MySubModule).Assembly);
-                _uiExtender.Enable();
-            }
-            catch (Exception e)
-            {
-                var ex = e;
-            }
-
-        }
-
-
-        protected override void OnBeforeInitialModuleScreenSetAsRoot()
-        {
-            try
-            {
-                base.OnBeforeInitialModuleScreenSetAsRoot();
-
-                
-            }
-            catch (Exception e)
-            {
-                var ex = e;
+                var campaignStarter = (CampaignGameStarter)gameStarter;
+                campaignStarter.AddBehavior(new AddChoicesNumbersBehavior());
             }
         }
-      
     }
 }
