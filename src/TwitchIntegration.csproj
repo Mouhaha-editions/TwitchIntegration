@@ -37,10 +37,12 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Behaviors\AddChoicesNumbersBehavior.cs" />
+    <Compile Include="Behaviors\DialogChoicesBehavior.cs" />
     <Compile Include="MySubModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TwitchManager.cs" />
+    <Compile Include="Twitch\TwitchConfiguration.cs" />
+    <Compile Include="Twitch\TwitchSurvey.cs" />
+    <Compile Include="Twitch\TwitchSurveyProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
