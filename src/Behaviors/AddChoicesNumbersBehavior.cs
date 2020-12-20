@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace TwitchIntegration.Behaviors
@@ -13,6 +14,8 @@ namespace TwitchIntegration.Behaviors
         public override void RegisterEvents()
         {
             CampaignEvents.SetupPreConversationEvent.AddNonSerializedListener(this, InsertChoicesNumbers);
+            Campaign.Current.ConversationManager.ConversationBegin += SendChoices;
+            Campaign.Current.ConversationManager.ConversationContinued += SendChoices;
         }
 
         protected virtual void InsertChoicesNumbers()
@@ -51,6 +54,34 @@ namespace TwitchIntegration.Behaviors
 
                 Initialized = true;
             }
+        }
+
+        protected virtual void SendChoices()
+        {
+            if (!Campaign.Current.ConversationManager.CurOptions.Any()) return;
+
+            var choices = GetChoices();
+            if (!choices.Any()) return;
+
+            var choiceStr = string.Join(", ", choices);
+
+            InformationManager.DisplayMessage(new InformationMessage($"On demande à Twitch le choix entre les choix suivants : {choiceStr}"));
+        }
+
+        protected virtual List<string> GetChoices()
+        {
+            var choices = new List<string>();
+
+            foreach (var choice in Campaign.Current.ConversationManager.CurOptions)
+            {
+                var numberStr = choice.Text.ToString().Split(' ').FirstOrDefault();
+                if (int.TryParse(numberStr, out int number))
+                {
+                    choices.Add(number.ToString());
+                }
+            }
+
+            return choices;
         }
 
         public override void SyncData(IDataStore dataStore)
